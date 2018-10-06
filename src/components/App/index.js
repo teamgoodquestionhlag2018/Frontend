@@ -10,7 +10,7 @@ class App extends Component {
     return (
       <Router>
         <div style={{ display: "flex" }}>
-          <MenuComponent style={{ width: "500px" }} />
+          <MenuComponent />
           <div>
             <Route exact path="/" component={List} />
             <Route path="/form" component={Form} />

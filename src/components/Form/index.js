@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
 import FormGroup from "@material-ui/core/FormGroup";
 import TextField from "@material-ui/core/TextField";
@@ -64,12 +65,20 @@ class Form extends Component {
             }
           ]
         })
-        .then(resp => console.log("Server response data", resp.data))
+        .then(resp => {
+          console.log("Server response data", resp.data.id);
+          this.setState({
+            proposalId: resp.data.id
+          });
+        })
+
         .catch(err => console.log("Error ", err));
     }
   };
   render() {
-    return (
+    return this.state.proposalId ? (
+      <Redirect to={`/proposals/${this.state.proposalId}`} />
+    ) : (
       <div>
         <Typography variant="headline">Create contract proposal</Typography>
         <FormGroup style={{ width: "700px" }}>

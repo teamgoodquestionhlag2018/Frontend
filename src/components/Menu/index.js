@@ -8,9 +8,15 @@ import Typography from "@material-ui/core/Typography";
 class MenuComponent extends Component {
   render() {
     return (
-      <div>
+      <div
+        style={{
+          width: "200px",
+          marginRight: "10px",
+          borderRight: "solid black 1px"
+        }}
+      >
         <Typography variant="headline">Menu</Typography>
-        <MenuList style={{ width: "200px", marginRight: "1vw" }}>
+        <MenuList style={{ marginRight: "1vw" }}>
           <Link
             style={{ textDecoration: "none", color: "black" }}
             to={"/list/"}
