@@ -3,13 +3,14 @@
 This Freelance Contract is entered into and made effective as of {{ date.now }} , by and between:
  
 {{ client.name }}, the client ("Client"),
+    {{ company.address }}
  
 {{ freelancer.name }}, the contractor (“Freelancer”).
  
 Both parties agree as follows:
  
 ## Description of the Services
-{{ proposal.description }}
+{{ contract.summary }}
 
 ## Milestones
 
@@ -26,4 +27,3 @@ Either party has the right to terminate this agreement after every milestone.
 
 ## Terms and Conditions
 This Freelance Contract is governed by the terms and conditions stated in the contract. 
- 
