@@ -10,27 +10,26 @@ class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: false
+      error: false,
+      newMilestone: false
     };
   }
   isEmpty = val => {
-    console.log(val);
     if (val == null || val === "") {
       return true;
     } else {
       return false;
     }
   };
+  addMilestone = () => {
+    this.setState({
+      newMilestone: true
+    });
+  };
   handleInput = e => {
-    console.log(e.target.name, ": ", e.target.value);
     this[e.target.name] = e.target.value;
   };
   sendData = () => {
-    console.log(this.companyName);
-    console.log(this.milestonePrice);
-    console.log(this.milestoneDeadline);
-    console.log(this.milestoneRequirements);
-
     if (
       // this.isEmtpy(this.freelancerName) ||
       this.isEmpty(this.companyName) ||
@@ -45,6 +44,7 @@ class Form extends Component {
       this.setState({
         error: false
       });
+      // data of second milestone is not sent to server
       axios
         .post("http://localhost:3001/proposals", {
           freelancer: "John",
@@ -64,7 +64,7 @@ class Form extends Component {
             }
           ]
         })
-        .then(resp => console.log("Server response", resp.data))
+        .then(resp => console.log("Server response data", resp.data))
         .catch(err => console.log("Error ", err));
     }
   };
@@ -72,7 +72,7 @@ class Form extends Component {
     return (
       <div>
         <Typography variant="headline">Create contract proposal</Typography>
-        <FormGroup>
+        <FormGroup style={{ width: "700px" }}>
           <TextField
             name="companyName"
             onChange={this.handleInput}
@@ -82,7 +82,7 @@ class Form extends Component {
           <TextField
             name="companyStreet"
             onChange={this.handleInput} // required
-            label="Address"
+            label="Street"
           />
           <TextField
             name="companyCity"
@@ -99,37 +99,91 @@ class Form extends Component {
             onChange={this.handleInput} // required
             label="Contract title"
           />
-          <div>
-            <TextField
-              name="contractSummary"
-              onChange={this.handleInput} // required
-              label="Summary"
-            />
-            <Typography variant="subheading">Milestone</Typography>
-            <TextField
-              name="milestoneRequirements"
-              onChange={this.handleInput}
-              required
-              label="Requirements"
-            />
-            <TextField
-              name="milestoneDeadline"
-              onChange={this.handleInput}
-              required
-              label="Due date"
-            />
-            <TextField
-              name="milestonePrice"
-              onChange={this.handleInput}
-              required
-              label="Price"
-            />
-          </div>
+
+          <TextField
+            name="contractSummary"
+            onChange={this.handleInput} // required
+            label="Summary"
+          />
+          <Typography variant="subheading" style={{ marginTop: "20px" }}>
+            Milestone 1
+          </Typography>
+
+          <TextField
+            name="milestoneRequirements"
+            onChange={this.handleInput}
+            required
+            label="Requirements"
+            multiline={true}
+            rows={1}
+            rowsMax={5}
+          />
+          <TextField
+            type="date"
+            name="milestoneDeadline"
+            onChange={this.handleInput}
+            required
+            label="Due date"
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+          <TextField
+            name="milestonePrice"
+            onChange={this.handleInput}
+            required
+            label="Price"
+          />
+          {this.state.newMilestone && (
+            <FormGroup>
+              <Typography variant="subheading" style={{ marginTop: "20px" }}>
+                Milestone 2
+              </Typography>
+
+              <TextField
+                name="milestone2Requirements"
+                onChange={this.handleInput}
+                label="Requirements"
+                multiline={true}
+                rows={1}
+                rowsMax={5}
+              />
+              <TextField
+                type="date"
+                name="milestone2Deadline"
+                onChange={this.handleInput}
+                label="Due date"
+                InputLabelProps={{
+                  shrink: true
+                }}
+              />
+              <TextField
+                name="milestone2Price"
+                onChange={this.handleInput}
+                label="Price"
+              />
+            </FormGroup>
+          )}
+
+          <Button
+            onClick={this.addMilestone}
+            size="small"
+            style={{
+              width: "200px",
+              marginTop: "10px",
+              background: "lightGrey"
+            }}
+          >
+            Add more milestones
+          </Button>
+
           <Snackbar
             open={this.state.error}
             message="Please fill in all required fields"
           />
-          <Button onClick={this.sendData}>Create proposal</Button>
+          <Button style={{ top: "20px" }} onClick={this.sendData}>
+            Create proposal
+          </Button>
         </FormGroup>
       </div>
     );
