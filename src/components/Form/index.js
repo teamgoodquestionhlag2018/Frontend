@@ -125,7 +125,6 @@ class Form extends Component {
               label="Price"
             />
           </div>
-          {/* {this.state.error && <div>{this.state.error}</div>} */}
           <Snackbar
             open={this.state.error}
             message="Please fill in all required fields"
