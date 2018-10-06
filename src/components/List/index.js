@@ -5,12 +5,9 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
-import Icon from "@material-ui/core/Icon";
 import { Link } from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
 import Button from "@material-ui/core/Button";
-import DeleteIcon from "@material-ui/icons/Delete";
-import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 
 class ProposalList extends Component {
@@ -64,7 +61,7 @@ class ProposalList extends Component {
                                     <ListItem button>
                                         <ListItemText
                                             primary={
-                                                contract.contractName ||
+                                                contract.title ||
                                                 "Contract Name"
                                             }
                                             secondary={new Date(
