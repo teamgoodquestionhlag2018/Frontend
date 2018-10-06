@@ -69,25 +69,25 @@ class Proposal extends Component {
               component="h2"
               style={{ margin: '2em 0 1em' }}
             >
-              Milestones
+              Milestone
             </Typography>
             <List component="ul">
               <ListItem>
                 <ListItemText
                   primary="Requirements"
-                  secondary={proposal.milestones.requirements}
+                  secondary={proposal.milestone.requirements}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="Deadline"
-                  secondary={new Date().toDateString(proposal.milestones.deadline)}
+                  secondary={new Date().toDateString(proposal.milestone.deadline)}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="Price"
-                  secondary={proposal.milestones.price}
+                  secondary={proposal.milestone.price}
                 />
               </ListItem>
             </List>

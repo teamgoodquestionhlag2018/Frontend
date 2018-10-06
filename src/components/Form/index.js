@@ -57,7 +57,7 @@ class Form extends Component {
           },
           contractTitle: this.contractTitle,
           contractSummary: this.contractSummary,
-          milestones: [
+          milestone: [
             {
               price: this.milestonePrice,
               requirements: this.milestoneRequirements,
