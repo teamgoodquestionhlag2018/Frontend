@@ -6,6 +6,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
+import { Link } from "react-router-dom";
 
 class ProposalList extends Component {
     constructor(props) {
@@ -15,11 +16,9 @@ class ProposalList extends Component {
     componentDidMount() {
         axios.get("http://localhost:3001/proposals").then(({ data }) => {
             this.setState({ data });
+            console.log(data);
         });
     }
-    //{this.props.pending && this.props.pending.length ? (
-    //    this.props.pending.map(pending => {
-
     render() {
         return (
             <List>
@@ -27,19 +26,27 @@ class ProposalList extends Component {
 
                 {this.state.data &&
                     this.state.data.map(contract => {
+                        console.log(contract.id);
                         return (
-                            <div key={contract.id}>
-                                <ListItem button>
-                                    <ListItemText
-                                        primary={
-                                            contract.contractName ||
-                                            "Contract Name"
-                                        }
-                                        secondary={contract.creationDate}
-                                    />
-                                </ListItem>
-                                <Divider />
-                            </div>
+                            <Link
+                                to={`/proposals/${contract.id}`}
+                                style={{
+                                    textDecoration: "none"
+                                }}
+                            >
+                                <div key={contract.id}>
+                                    <ListItem button>
+                                        <ListItemText
+                                            primary={
+                                                contract.contractName ||
+                                                "Contract Name"
+                                            }
+                                            secondary={contract.creationDate}
+                                        />
+                                    </ListItem>
+                                    <Divider />
+                                </div>
+                            </Link>
                         );
                     })}
             </List>
