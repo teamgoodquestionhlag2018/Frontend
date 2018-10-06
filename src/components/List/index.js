@@ -48,7 +48,6 @@ class ProposalList extends Component {
                 </div>
                 {this.state.data &&
                     this.state.data.map(contract => {
-                        var dateNumber = parseInt(contract.creationDate);
                         return (
                             <Link
                                 to={`/proposals/${contract.id}`}
@@ -65,8 +64,7 @@ class ProposalList extends Component {
                                                 "Contract Name"
                                             }
                                             secondary={new Date(
-                                                dateNumber
-                                            ).toLocaleDateString()}
+                                            ).toDateString(contract.creationDate)}
                                         />
                                     </ListItem>
                                     <Divider />

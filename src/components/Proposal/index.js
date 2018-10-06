@@ -57,7 +57,7 @@ class Proposal extends Component {
               {
                 // Format date
               }
-              {proposal.creationDate}, by and between:
+              {new Date().toDateString(proposal.creationDate)}, by and between:
               {proposal.client.name}, the client ("Client"),
               {proposal.freelancer.name}, the contractor (“Freelancer”). Both
               parties agree as follows:
@@ -69,25 +69,25 @@ class Proposal extends Component {
               component="h2"
               style={{ margin: '2em 0 1em' }}
             >
-              Milestones
+              Milestone
             </Typography>
             <List component="ul">
               <ListItem>
                 <ListItemText
                   primary="Requirements"
-                  secondary={proposal.milestones.requirements}
+                  secondary={proposal.milestone.requirements}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="Deadline"
-                  secondary={proposal.milestones.deadline}
+                  secondary={new Date().toDateString(proposal.milestone.deadline)}
                 />
               </ListItem>
               <ListItem>
                 <ListItemText
                   primary="Price"
-                  secondary={proposal.milestones.price}
+                  secondary={proposal.milestone.price}
                 />
               </ListItem>
             </List>
