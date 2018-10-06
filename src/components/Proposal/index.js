@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 
 class Proposal extends Component {
   render() {
-    return <div>Proposal</div>
+    return <div>Proposal</div>;
   }
 }
 
-export default Proposal
+export default Proposal;
