@@ -5,7 +5,13 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
+import Icon from "@material-ui/core/Icon";
 import { Link } from "react-router-dom";
+import AddIcon from "@material-ui/icons/Add";
+import Button from "@material-ui/core/Button";
+import DeleteIcon from "@material-ui/icons/Delete";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
 
 class ProposalList extends Component {
     constructor(props) {
@@ -21,8 +27,28 @@ class ProposalList extends Component {
     render() {
         return (
             <List>
-                <Typography variant="headline">Your Contracts</Typography>
-
+                <Typography
+                    variant="headline"
+                    style={{
+                        float: "left"
+                    }}
+                >
+                    Your Contracts
+                </Typography>
+                <div
+                    style={{
+                        float: "right",
+                        marginRight: "20px"
+                    }}
+                >
+                    <Tooltip title="Create new contract">
+                        <Link to={"/form"}>
+                            <Button variant="fab" color="secondary">
+                                <AddIcon />
+                            </Button>
+                        </Link>
+                    </Tooltip>
+                </div>
                 {this.state.data &&
                     this.state.data.map(contract => {
                         var dateNumber = parseInt(contract.creationDate);
