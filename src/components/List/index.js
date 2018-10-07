@@ -25,7 +25,7 @@ class ProposalList extends Component {
             })
             .then(({ data }) => {
                 this.setState({ data });
-                console.log(data);
+                console.log({ data });
             });
     }
     render() {
@@ -54,7 +54,6 @@ class ProposalList extends Component {
                 </div>
                 {this.state.data &&
                     this.state.data.map(contract => {
-                        console.log("milestones " + contract.milestones);
                         return (
                             <Link
                                 to={`/proposals/${contract.id}`}
