@@ -17,10 +17,16 @@ class ProposalList extends Component {
         this.state = {};
     }
     componentDidMount() {
-        axios.get("http://localhost:3001/proposals").then(({ data }) => {
-            this.setState({ data });
-            console.log(data);
-        });
+        axios
+            .get("http://localhost:3001/proposals", {
+                headers: {
+                    token: "4cfe8299-ccdb-4483-9ec1-0f4ddcb08743"
+                }
+            })
+            .then(({ data }) => {
+                this.setState({ data });
+                console.log(data);
+            });
     }
     render() {
         return (
@@ -48,7 +54,6 @@ class ProposalList extends Component {
                 </div>
                 {this.state.data &&
                     this.state.data.map(contract => {
-                        var dateNumber = parseInt(contract.creationDate);
                         console.log("milestones " + contract.milestones);
                         return (
                             <Link
@@ -65,9 +70,9 @@ class ProposalList extends Component {
                                                 contract.contractTitle ||
                                                 "Contract Proposal Name"
                                             }
-                                            secondary={new Date(
-                                                dateNumber
-                                            ).toLocaleDateString()}
+                                            secondary={new Date().toDateString(
+                                                contract.creationDate
+                                            )}
                                         />
                                         {contract.milestones.length &&
                                             contract.milestones.map(
@@ -77,9 +82,8 @@ class ProposalList extends Component {
                                                             title={
                                                                 milestone.client
                                                                     .signed &&
-                                                                milestone
+                                                                milestone.client
                                                                     .freelancer
-                                                                    .signed
                                                                     ? "signed"
                                                                     : "not signed"
                                                             }
