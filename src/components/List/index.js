@@ -67,7 +67,7 @@ class ProposalList extends Component {
                                     <ListItem button>
                                         <ListItemText
                                             primary={
-                                                contract.contractTitle ||
+                                                contract.title ||
                                                 "Contract Proposal Name"
                                             }
                                             secondary={new Date().toDateString(
@@ -79,6 +79,7 @@ class ProposalList extends Component {
                                                 milestone => {
                                                     return (
                                                         <Tooltip
+                                                            key={milestone.id}
                                                             title={
                                                                 milestone.client
                                                                     .signed &&
