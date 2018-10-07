@@ -45,6 +45,12 @@ class Form extends Component {
         this.isEmpty(this[milestoneDeadline])
       ) {
         return milestonesArray;
+      } else if (
+        this.isEmpty(this[milestonePrice]) ||
+        this.isEmpty(this[milestoneRequirements]) ||
+        this.isEmpty(this[milestoneDeadline])
+      ) {
+        return (milestonesArray = []);
       } else {
         return (milestonesArray = [
           ...milestonesArray,
@@ -60,20 +66,18 @@ class Form extends Component {
   };
 
   sendData = () => {
+    const milestonesArray = this.composeMilestones(this.state.milestones);
+    console.log("milestonesArray", milestonesArray);
     if (
       this.isEmpty(this.companyName) ||
       this.isEmpty(this.milestone1Price) ||
       this.isEmpty(this.milestone1Requirements) ||
-      this.isEmpty(this.milestone1Deadline)
+      this.isEmpty(this.milestone1Deadline) ||
+      milestonesArray.length < 1
     ) {
-      this.setState({
-        error: true
-      });
+      this.setState({ error: true });
     } else {
-      this.setState({
-        error: false
-      });
-      const milestonesArray = this.composeMilestones(this.state.milestones);
+      this.setState({ error: false });
       axios
         .post("http://localhost:3001/proposals", {
           freelancer: "John",
@@ -89,9 +93,7 @@ class Form extends Component {
         })
         .then(resp => {
           console.log("Server response data", resp.data);
-          this.setState({
-            proposalId: resp.data.id
-          });
+          this.setState({ proposalId: resp.data.id });
         })
 
         .catch(err => console.log("Error ", err));
