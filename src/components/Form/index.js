@@ -37,17 +37,17 @@ class Form extends Component {
     let milestonesArray = [];
     milestones.map(item => {
       const milestonePrice = "milestone" + item + "Price";
-      const milestoneRequirements = "milestone" + item + "Requirements";
+      const milestoneRequirement = "milestone" + item + "Requirement";
       const milestoneDeadline = "milestone" + item + "Deadline";
       if (
         this.isEmpty(this[milestonePrice]) &&
-        this.isEmpty(this[milestoneRequirements]) &&
+        this.isEmpty(this[milestoneRequirement]) &&
         this.isEmpty(this[milestoneDeadline])
       ) {
         return milestonesArray;
       } else if (
         this.isEmpty(this[milestonePrice]) ||
-        this.isEmpty(this[milestoneRequirements]) ||
+        this.isEmpty(this[milestoneRequirement]) ||
         this.isEmpty(this[milestoneDeadline])
       ) {
         return (milestonesArray = []);
@@ -56,8 +56,8 @@ class Form extends Component {
           ...milestonesArray,
           {
             price: this[milestonePrice],
-            requirements: this[milestoneRequirements],
-            dueDate: this[milestoneDeadline]
+            requirement: this[milestoneRequirement],
+            deadline: this[milestoneDeadline]
           }
         ]);
       }
@@ -71,7 +71,7 @@ class Form extends Component {
     if (
       this.isEmpty(this.companyName) ||
       this.isEmpty(this.milestone1Price) ||
-      this.isEmpty(this.milestone1Requirements) ||
+      this.isEmpty(this.milestone1Requirement) ||
       this.isEmpty(this.milestone1Deadline) ||
       milestonesArray.length < 1
     ) {
@@ -79,18 +79,26 @@ class Form extends Component {
     } else {
       this.setState({ error: false });
       axios
-        .post("http://localhost:3001/proposals", {
-          freelancer: "John",
-          client: this.companyName,
-          companyAddress: {
-            street: this.companyStreet,
-            city: this.companyCity,
-            country: this.companyCountry
+        .post(
+          "http://localhost:3001/proposals",
+          {
+            freelancer: "John",
+            client: this.companyName,
+            companyAddress: {
+              street: this.companyStreet,
+              city: this.companyCity,
+              country: this.companyCountry
+            },
+            title: this.contractTitle,
+            summary: this.contractSummary,
+            milestones: milestonesArray
           },
-          contractTitle: this.contractTitle,
-          contractSummary: this.contractSummary,
-          milestones: milestonesArray
-        })
+          {
+            headers: {
+              token: "4cfe8299-ccdb-4483-9ec1-0f4ddcb08743"
+            }
+          }
+        )
         .then(resp => {
           console.log("Server response data", resp.data);
           this.setState({ proposalId: resp.data.id });
@@ -157,10 +165,10 @@ class Form extends Component {
 
                   <TextField
                     style={{ width: "347px", marginRight: "10px" }}
-                    name={`milestone${milestone}Requirements`}
+                    name={`milestone${milestone}Requirement`}
                     onChange={this.handleInput}
                     required={milestone === 1 ? true : false}
-                    label="Requirements"
+                    label="Requirement"
                   />
                   <TextField
                     style={{ marginRight: "10px" }}
@@ -203,7 +211,7 @@ class Form extends Component {
         <Snackbar
           style={{ left: "700px", top: "20px" }}
           open={this.state.error}
-          message="Please fill in all required fields"
+          message="Please fill in all required fields."
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         />
       </div>
