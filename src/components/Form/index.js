@@ -12,7 +12,7 @@ class Form extends Component {
     super(props);
     this.state = {
       error: false,
-      newMilestone: false
+      milestones: [1]
     };
   }
   isEmpty = val => {
@@ -24,19 +24,47 @@ class Form extends Component {
   };
   addMilestone = () => {
     this.setState({
-      newMilestone: true
+      milestones: [
+        ...this.state.milestones,
+        this.state.milestones[this.state.milestones.length - 1] + 1
+      ]
     });
   };
   handleInput = e => {
     this[e.target.name] = e.target.value;
   };
+  composeMilestones = milestones => {
+    let milestonesArray = [];
+    milestones.map(item => {
+      const milestonePrice = "milestone" + item + "Price";
+      const milestoneRequirements = "milestone" + item + "Requirements";
+      const milestoneDeadline = "milestone" + item + "Deadline";
+      if (
+        this.isEmpty(this[milestonePrice]) &&
+        this.isEmpty(this[milestoneRequirements]) &&
+        this.isEmpty(this[milestoneDeadline])
+      ) {
+        return milestonesArray;
+      } else {
+        return (milestonesArray = [
+          ...milestonesArray,
+          {
+            price: this[milestonePrice],
+            requirements: this[milestoneRequirements],
+            dueDate: this[milestoneDeadline]
+          }
+        ]);
+      }
+    });
+    return milestonesArray;
+  };
+
   sendData = () => {
     if (
-      // this.isEmtpy(this.freelancerName) ||
       this.isEmpty(this.companyName) ||
-      this.isEmpty(this.milestonePrice) ||
-      this.isEmpty(this.milestoneRequirements) ||
-      this.isEmpty(this.milestoneDeadline)
+      this.isEmpty(this.milestone1Price) ||
+      this.isEmpty(this.milestone1Requirements) ||
+      this.isEmpty(this.milestone1Deadline)
     ) {
       this.setState({
         error: true
@@ -45,7 +73,7 @@ class Form extends Component {
       this.setState({
         error: false
       });
-      // data of second milestone is not sent to server
+      const milestonesArray = this.composeMilestones(this.state.milestones);
       axios
         .post("http://localhost:3001/proposals", {
           freelancer: "John",
@@ -57,16 +85,10 @@ class Form extends Component {
           },
           contractTitle: this.contractTitle,
           contractSummary: this.contractSummary,
-          milestones: [
-            {
-              price: this.milestonePrice,
-              requirements: this.milestoneRequirements,
-              dueDate: this.milestoneDeadline
-            }
-          ]
+          milestones: milestonesArray
         })
         .then(resp => {
-          console.log("Server response data", resp.data.id);
+          console.log("Server response data", resp.data);
           this.setState({
             proposalId: resp.data.id
           });
@@ -79,9 +101,9 @@ class Form extends Component {
     return this.state.proposalId ? (
       <Redirect to={`/proposals/${this.state.proposalId}`} />
     ) : (
-      <div>
+      <div style={{ width: "700px" }}>
         <Typography variant="headline">Create contract proposal</Typography>
-        <FormGroup style={{ width: "700px" }}>
+        <FormGroup>
           <TextField
             name="companyName"
             onChange={this.handleInput}
@@ -90,89 +112,72 @@ class Form extends Component {
           />
           <TextField
             name="companyStreet"
-            onChange={this.handleInput} // required
+            onChange={this.handleInput}
+            required
             label="Street"
           />
           <TextField
             name="companyCity"
-            onChange={this.handleInput} // required
+            onChange={this.handleInput}
+            required
             label="City"
           />
           <TextField
             name="companyContry"
-            onChange={this.handleInput} // required
+            onChange={this.handleInput}
+            required
             label="Country"
           />
           <TextField
             name="contractTitle"
-            onChange={this.handleInput} // required
+            onChange={this.handleInput}
+            required
             label="Contract title"
           />
 
           <TextField
             name="contractSummary"
-            onChange={this.handleInput} // required
-            label="Summary"
+            onChange={this.handleInput}
+            required
+            label="Description"
           />
-          <Typography variant="subheading" style={{ marginTop: "20px" }}>
-            Milestone 1
-          </Typography>
 
-          <TextField
-            name="milestoneRequirements"
-            onChange={this.handleInput}
-            required
-            label="Requirements"
-            multiline={true}
-            rows={1}
-            rowsMax={5}
-          />
-          <TextField
-            type="date"
-            name="milestoneDeadline"
-            onChange={this.handleInput}
-            required
-            label="Due date"
-            InputLabelProps={{
-              shrink: true
-            }}
-          />
-          <TextField
-            name="milestonePrice"
-            onChange={this.handleInput}
-            required
-            label="Price"
-          />
-          {this.state.newMilestone && (
-            <FormGroup>
-              <Typography variant="subheading" style={{ marginTop: "20px" }}>
-                Milestone 2
-              </Typography>
+          {this.state.milestones &&
+            this.state.milestones.map(milestone => {
+              return (
+                <div key={milestone}>
+                  <Typography
+                    variant="subheading"
+                    style={{ marginTop: "20px" }}
+                  >
+                    Milestone {milestone}
+                  </Typography>
 
-              <TextField
-                name="milestone2Requirements"
-                onChange={this.handleInput}
-                label="Requirements"
-                multiline={true}
-                rows={1}
-                rowsMax={5}
-              />
-              <TextField
-                type="date"
-                name="milestone2Deadline"
-                onChange={this.handleInput}
-                label="Due date"
-                InputLabelProps={{
-                  shrink: true
-                }}
-              />
-              <TextField
-                name="milestone2Price"
-                onChange={this.handleInput}
-                label="Price"
-              />
-            </FormGroup>
-          )}
+                  <TextField
+                    style={{ width: "347px", marginRight: "10px" }}
+                    name={`milestone${milestone}Requirements`}
+                    onChange={this.handleInput}
+                    required={milestone === 1 ? true : false}
+                    label="Requirements"
+                  />
+                  <TextField
+                    style={{ marginRight: "10px" }}
+                    type="date"
+                    name={`milestone${milestone}Deadline`}
+                    onChange={this.handleInput}
+                    required={milestone === 1 ? true : false}
+                    label="Due date"
+                    InputLabelProps={{ shrink: true }}
+                  />
+                  <TextField
+                    name={`milestone${milestone}Price`}
+                    onChange={this.handleInput}
+                    required={milestone === 1 ? true : false}
+                    label="Price"
+                  />
+                </div>
+              );
+            })}
 
           <Button
             onClick={this.addMilestone}
@@ -186,14 +191,19 @@ class Form extends Component {
             Add more milestones
           </Button>
 
-          <Snackbar
-            open={this.state.error}
-            message="Please fill in all required fields"
-          />
-          <Button style={{ top: "20px" }} onClick={this.sendData}>
+          <Button
+            style={{ top: "20px", background: "grey" }}
+            onClick={this.sendData}
+          >
             Create proposal
           </Button>
         </FormGroup>
+        <Snackbar
+          style={{ left: "700px", top: "20px" }}
+          open={this.state.error}
+          message="Please fill in all required fields"
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        />
       </div>
     );
   }
